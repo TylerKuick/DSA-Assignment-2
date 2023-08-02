@@ -53,3 +53,22 @@ Pass: {i+1}
         db[i.getId()] = i      # Set ID as Key and Member object as Value
 
     return db   # Sorted db
+
+
+def insertionSort(db):
+    n = len(db)
+    for i in range(1, n):
+        value = db[i]
+        pos = 1
+        while pos > 0 and value < db[pos-1]:
+            db[pos] = db[pos-1]
+            pos -= 1
+        db[pos] = value
+
+    print(f"""
+Pass: {i+1}
+---------------------------------""")
+    for k in db:
+        print(f"ID: {db[k].getId()}, Tier: {db[k].getTier()}")
+
+    return db

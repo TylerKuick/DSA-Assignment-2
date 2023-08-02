@@ -35,9 +35,13 @@ while loop:
     (1). Display all members' records 
     (2). Add a new member
     (3). Sort Members by points (DESC)
-    (4): Sort Members by Tier (ASC)
-    (5). Populate Data (Reset Database)
-    (6). Quit
+    (4). Sort Members by Tier (ASC)
+    (5). Sort Members by Member ID (ASC)
+    (6). Sort Members by Tier, followed by Points (ASC)
+    (7). Enter Member's Request
+    (8). Set Number of Records per row to display    
+    (9). Populate Data (Reset Database)
+    (0). Quit
     -----------------------------------
     """)
     option = int(input("Choose an option [1, 2, 3, 4, 5, 6]: "))
@@ -85,7 +89,12 @@ while loop:
     Points: {member.getPoints()}
     -----------------------------------
             """)  
-    elif option == 5:   # Set Test Data / Reset DB 
+    elif option == 5:
+        db = insertionSort(db)
+        for key in db:
+            print(db[key].getId())
+
+    elif option == 9:   # Set Test Data / Reset DB 
         db = {}
         member_list = populateData()
         for i in member_list:   # Adds every member into database with ID as key and Member object as value 
