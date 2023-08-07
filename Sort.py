@@ -54,21 +54,88 @@ Pass: {i+1}
 
     return db   # Sorted db
 
-
+# Insertion Sort 
 def insertionSort(db):
+    insertionList = []
     n = len(db)
+    for key in db:
+        insertionList.append(db[key])
     for i in range(1, n):
-        value = db[i]
-        pos = 1
-        while pos > 0 and value < db[pos-1]:
-            db[pos] = db[pos-1]
-            pos -= 1
-        db[pos] = value
+        target = insertionList[i]   # Set the target employee object to move 
+        value = insertionList[i].getId()    # Comparison item: Member ID
+        pos = i
+        while pos > 0 and value < insertionList[pos-1].getId():  # Compare against every 
+            insertionList[pos] = insertionList[pos-1]   # Employee object changes places if condition is met 
+            pos -= 1    # position number is reduced by one 
+        insertionList[pos] = target   # Update the list if changes were made, if not target stays at the same position   
 
-    print(f"""
-Pass: {i+1}
+        print(f"""
+Pass: {i}
 ---------------------------------""")
-    for k in db:
-        print(f"ID: {db[k].getId()}, Tier: {db[k].getTier()}")
+        for k in insertionList:
+            print(f"ID: {k.getId()}")
 
-    return db
+    db = {}     # Reset the db into a empty dictionary
+    for i in insertionList:
+        db[i.getId()] = i    # Set ID as Key and Member object as Value
+
+    return db   # Sorted db
+
+
+def mergeSort(db):   # Intake list of Member Objects
+    if type(db) == dict: 
+        mergeList = []
+        for key in db:
+            mergeList.append(db[key])
+    else:
+        mergeList = db
+    if len(mergeList) <= 1:
+        return mergeList
+    else:
+        mid = len(mergeList) // 2                           # Find midpoint to split list
+        leftHalf = mergeSort(mergeList[:mid])               # Recursively call mergeSort for
+        rightHalf = mergeSort(mergeList[mid:])              # each half list that was split
+        newList = mergeSortedLists(leftHalf, rightHalf)     # join both lists after being sorted 
+
+        # Further sorting based on points 
+        for i in range(1, len(newList)):
+            if newList[i].getTier() == newList[i-1].getTier():  # If the tiers are the same
+                if newList[i].getPoints() < newList[i-1].getPoints():   # compare member points, switch places 
+                    temp = newList[i-1]                                   # between member with lesser points and 
+                    newList[i-1] = newList[i]                           # member with more points
+                    newList[i] = temp                                 # Uses three point switching
+
+        # Displaying Passes / New Lists
+        print("""
+New List:
+------------------------""")
+        for mem in newList:
+            print(f"ID: {mem.getId()}, Tier: {mem.getTier()}")
+        print("------------------------")
+
+    return newList
+
+def mergeSortedLists(left, right):
+    i = 0
+    j = 0
+    newList = []
+    while i < len(left) and j < len(right):
+        if left[i].getTier() < right[j].getTier():
+           newList.append(left[i])
+           i += 1
+        elif left[i].getTier() == right[j].getTier() and left[i].getPoints() < right[i].getPoints():
+            newList.append(left[i])
+            i += 1 
+        else:
+           newList.append(right[j])
+           j += 1 
+
+    while i < len(left):
+        newList.append(left[i])
+        i += 1
+
+    while j < len(right):
+        newList.append(right[j])
+        j += 1
+
+    return newList
